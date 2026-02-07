@@ -5,22 +5,24 @@
 
 ##
 
-- **💥** → I have been programming for over 3 years since a very young age. My experience includes developing in areas such as Discord Bots, Telegram Bots, Web Applications, Websites, and more!
-- **👀** → I am passionate about creating bots to automate various processes and ensuring data protection from third parties.
-- **💞️** → I actively participate in developing third-party projects. A full list of my work is available below!
+- **💥** → I'm a junior developer with over three years of programming experience. My skills include building bots for messengers (Telegram, Discord, VK), developing websites and web applications, writing Python scripts, and more.
+- **👀** → I'm passionate about web development, automation systems, and related technologies.
 - **📫** → Feel free to contact me:
+  - Telegram: [@kash_ts](https://t.me/@kash_ts)
   - Gmail: [ipomainkra@gmail.com](mailto:ipomainkra@gmail.com)
   - Discord: [Guilds](https://discord.com/invite/BxMS8zUJvQ)
 
 ---
 
 <div align="center">
-  <img src="https://img.shields.io/badge/JavaScript-deb602.svg?style=for-the-badge&logo=javascript&logoColor=white" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/react-20232a.svg?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/Postgres-316192.svg?style=for-the-badge&logo=postgresql&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/figma-F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" />
-  <img src="https://img.shields.io/badge/git-F05033.svg?style=for-the-badge&logo=git&logoColor=white" />
+  
+  [![Javascript](https://img.shields.io/badge/JavaScript-deb602.svg?style=for-the-badge&logo=javascript&logoColor=white)](#)
+  [![Typescript](https://img.shields.io/badge/TypeScript-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white)](#)
+  [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=fff)](#)
+  [![React](https://img.shields.io/badge/react-20232a.svg?style=for-the-badge&logo=react&logoColor=61DAFB)](#)
+
+  [![Figma](https://img.shields.io/badge/figma-F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)](#)
+  [![Git](https://img.shields.io/badge/git-F05033.svg?style=for-the-badge&logo=git&logoColor=white)](#)
 </div>
 
 ---
@@ -29,8 +31,7 @@
 
 | Name                        | Description                                                                               |
 |-----------------------------|-------------------------------------------------------------------------------------------|
-| 🎮 [**Kamish Bot**](https://github.com/kash-88/kamish-public) | My first serious discord bot. Subject: Gaming, Bot based on the gamecord library |
-| 💕 [**Okeano**](https://github.com/Dev14dbq/ReflexG) | My first project in Telegram. Based on Tinder, only a little worse |
+| 🎮 [**Kamish Bot**](https://github.com/kash-88/kamish-public) | A gaming-themed Discord bot built using the Gamecord library. |
 | 🖥️ [**DonationAlerts SDK**](https://github.com/kash-88/alerts-SDK) | Experiment with NPM librarie. SDC for interaction with DonationAlerts API |
 
 ---
