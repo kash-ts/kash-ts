@@ -1,7 +1,7 @@
 ##
 
-<h3 align="center">Hi, nice to see you on my Github!</h3>
-<p align="center">I'm Mikhail, also known as Kash.</p>
+<h3 align="center">Hi! Glad to see you on my GitHub page.</h3>
+<p align="center">My name is <b>Mikhail</b> (Nickname is <b>Kash</b>)</p>
 
 ##
 
@@ -27,7 +27,7 @@
 
 ---
 
-# My personal project's
+# Project's
 
 | Name                        | Description                                                                               |
 |-----------------------------|-------------------------------------------------------------------------------------------|
