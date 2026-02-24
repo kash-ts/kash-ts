@@ -36,8 +36,8 @@
 
 ---
 
-<div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
-  <a href="https://wakatime.com/@Kash_88">
+<div style="display: flex; flex-wrap: wrap; align-items: center;">
+  <a href="https://wakatime.com/@Kash_88" style="max-width: 50%;">
     <img 
       src="https://git-readme-api.k-team.fun/api/wakatime?username=kash_88&custom_title=WakaTime%20Stats%20%28since%20Oct%2028%2C%202024%29&theme=github_dark&hide_border=true&layout=compact&langs_count=10" 
       alt="Wakatime's Stats" 
@@ -45,7 +45,7 @@
     >
   </a>
   
-  <a href="https://github.com/kash_ts">
+  <a href="https://github.com/kash_ts" style="max-width: 50%;">
     <img 
       src="https://git-readme-api.k-team.fun/api?username=kash-ts&show_icons=true&theme=github_dark" 
       alt="Github's Stats" 
