@@ -31,19 +31,19 @@
 
 | Name                        | Description                                                                               |
 |-----------------------------|-------------------------------------------------------------------------------------------|
-| 🎮 [**Kamish Bot**](https://github.com/kash-88/kamish-public) | A gaming-themed Discord bot built using the Gamecord library. |
-| 🖥️ [**DonationAlerts SDK**](https://github.com/kash-88/alerts-SDK) | Experiment with NPM librarie. SDC for interaction with DonationAlerts API |
+| 🎮 [**Kamish Bot**](https://github.com/kash-ts/kamish-public) | A gaming-themed Discord bot built using the Gamecord library. |
+| 🖥️ [**DonationAlerts SDK**](https://github.com/kash-ts/alerts-SDK) | Experiment with NPM librarie. SDC for interaction with DonationAlerts API |
 
 ---
 
 # WakaTime Statistics
 
-[![Wakatime's Stats](https://github-readme-stats-sepia-ten-25.vercel.app/api/wakatime?username=kash_88&custom_title=WakaTime%20Stats%20%28since%20Oct%2028%2C%202024%29&theme=github_dark&hide_border=true&layout=compact&langs_count=10)](https://wakatime.com/@Kash_88)
+[![Wakatime's Stats](https:/git-readme-api.k-team.fun/api/wakatime?username=kash_ts&custom_title=WakaTime%20Stats%20%28since%20Oct%2028%2C%202024%29&theme=github_dark&hide_border=true&layout=compact&langs_count=10)](https://wakatime.com/@Kash_88)
 
 ---
 
 # GitHub Statistics
-![Github's Stats](https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=kash-88&theme=github_dark)
+![Github's Stats](https://git-readme-api.k-team.fun/api/cards/profile-details?username=kash-ts&theme=github_dark)
 
 ---
 
