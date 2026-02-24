@@ -27,7 +27,7 @@
 
 ---
 
-# Project's
+<h1 align="center">Project's</h1>
 
 | Name                        | Description                                                                               |
 |-----------------------------|-------------------------------------------------------------------------------------------|
@@ -36,18 +36,26 @@
 
 ---
 
-# WakaTime Statistics
-
-[![Wakatime's Stats](https:/git-readme-api.k-team.fun/api/wakatime?username=kash_ts&custom_title=WakaTime%20Stats%20%28since%20Oct%2028%2C%202024%29&theme=github_dark&hide_border=true&layout=compact&langs_count=10)](https://wakatime.com/@Kash_88)
-
----
-
-# GitHub Statistics
-![Github's Stats](https://git-readme-api.k-team.fun/api/cards/profile-details?username=kash-ts&theme=github_dark)
+<div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+  <a href="https://wakatime.com/@Kash_88">
+    <img 
+      src="https://git-readme-api.k-team.fun/api/wakatime?username=kash_88&custom_title=WakaTime%20Stats%20%28since%20Oct%2028%2C%202024%29&theme=github_dark&hide_border=true&layout=compact&langs_count=10" 
+      alt="Wakatime's Stats" 
+      style="max-width: 100%; height: auto;"
+    >
+  </a>
+  
+  <a href="https://github.com/kash_ts">
+    <img 
+      src="https://git-readme-api.k-team.fun/api?username=kash-ts&show_icons=true&theme=github_dark" 
+      alt="Github's Stats" 
+      style="max-width: 100%; height: auto;"
+    >
+  </a>
+</div>
 
 ---
 
 <p align="center">
     <strong>Thanks for visiting! Happy coding! 🖖</strong>
 </p>
-<a href="#"><img align="left" alt="Finish" width="100%" style="padding:10px;" src="https://raw.githubusercontent.com/HighAmbition211/HighAmbition211/auxiliary/others/Finish.svg" /></a>
