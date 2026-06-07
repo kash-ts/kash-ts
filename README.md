@@ -10,7 +10,6 @@
 - **📫** → Feel free to contact me:
   - Telegram: [@kash_ts](https://t.me/@kash_ts)
   - Gmail: [ipomainkra@gmail.com](mailto:ipomainkra@gmail.com)
-  - Discord: [Guilds](https://discord.com/invite/BxMS8zUJvQ)
 
 ---
 
