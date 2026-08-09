@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={`container ${styles.inner}`}>
+      <div className={styles.inner}>
         {/* Logo */}
         <Link href="#home" className={styles.logo} aria-label="Portfolio home">
           <span className={styles.logoBracket}>&lt;/&gt;</span>
