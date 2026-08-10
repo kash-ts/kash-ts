@@ -2,7 +2,7 @@
   height: 100vh;
   height: 100dvh;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   width: 100%;
@@ -13,29 +13,47 @@
   height: 100vh;
   height: 100dvh;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   position: relative;
   box-sizing: border-box;
   width: 100%;
+  padding-top: var(--header-height);
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 .section::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 
-@media (max-width: 768px) {
+.sectionContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 768px), (max-height: 650px) {
+  .fullpageContainer {
+    scroll-snap-type: none;
+    height: auto;
+    overflow-y: visible;
+  }
+
   .section {
-    height: 100vh;
-    height: 100dvh;
-    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    scroll-snap-align: none;
     justify-content: flex-start;
-    padding-top: calc(var(--header-height) + 1rem);
+    padding-top: calc(var(--header-height) + 1.5rem);
     padding-bottom: 2rem;
+    overflow-y: visible;
   }
 }

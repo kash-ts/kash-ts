@@ -118,6 +118,30 @@ main {
   padding-right: var(--page-padding-x);
 }
 
+@media (max-width: 1440px) {
+  :root {
+    --page-padding-x: calc(7rem / 1.5); /* 4.66rem - уменьшено в 1.5 раза */
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --page-padding-x: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding-x: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-padding-x: 1rem;
+  }
+}
+
 .section-padding {
   padding: var(--spacing-4xl) 0;
 }
