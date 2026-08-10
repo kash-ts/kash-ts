@@ -1,0 +1,221 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: #e8ebf4;
+  overflow: hidden;
+  padding-top: var(--header-height);
+}
+
+/* ---- Avatar: absolute background layer ---- */
+.avatarBg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 67%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.avatarImage {
+  object-fit: contain;
+  object-position: center center;
+}
+
+/* ---- Foreground grid ---- */
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  margin-top: 0;
+}
+
+/* ---- Text Content ---- */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.titleAccent {
+  color: var(--color-accent);
+}
+
+.subtitle {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  max-width: 560px;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-xs);
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-text-primary);
+  transition:
+    background var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.btnPrimary:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px rgba(71, 85, 105, 0.35);
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background: transparent;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-accent);
+  transition:
+    background var(--transition-base),
+    color var(--transition-fast),
+    box-shadow var(--transition-base);
+}
+
+.btnOutline:hover {
+  background: var(--color-text-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(26, 26, 46, 0.2);
+}
+
+/* ---- Stats Card ---- */
+.statsCard {
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg-dark-card);
+  border: 1px solid var(--color-bg-dark-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 220px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statNumber {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+}
+
+.statDivider {
+  height: 1px;
+  background: var(--color-bg-dark-border);
+}
+
+.statAvailability {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-xs);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-success);
+  flex-shrink: 0;
+}
+
+.availabilityText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-success);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: var(--spacing-xl);
+  }
+
+  .description {
+    max-width: 100%;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
+  .statsCard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+  }
+
+  .statDivider {
+    display: none;
+  }
+
+  .statItem {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btnPrimary,
+  .btnOutline {
+    flex: 1;
+    justify-content: center;
+  }
+}
