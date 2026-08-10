@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FiGithub, FiMail } from 'react-icons/fi';
 import { MdOutlineMonetizationOn } from 'react-icons/md';
+import { SOCIAL_LINKS } from '@/config/social';
 import styles from './Header.module.css';
 
 const navLinks = [
@@ -15,15 +16,12 @@ const navLinks = [
 ];
 
 interface HeaderProps {
-  activeSection?: string;
+  activeSection: string;
 }
 
-export default function Header({ activeSection: externalActiveSection }: HeaderProps) {
+export default function Header({ activeSection }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [internalActiveSection, setInternalActiveSection] = useState('home');
-
-  const activeSection = externalActiveSection ?? internalActiveSection;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,39 +31,28 @@ export default function Header({ activeSection: externalActiveSection }: HeaderP
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // IntersectionObserver to update active section on scroll if external activeSection is not provided
-  useEffect(() => {
-    if (externalActiveSection !== undefined) return;
-
-    const sectionIds = ['home', 'about', 'skills', 'works', 'contact'];
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInternalActiveSection(entry.target.id);
-          }
-        });
-      },
-      {
-        threshold: 0.3,
-      }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => {
-      sections.forEach((section) => observer.unobserve(section));
-    };
-  }, [externalActiveSection]);
-
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMenuOpen(false);
+
     const id = href.replace('#', '');
+    const container = document.getElementById('fullpage-container');
+
+    if (container) {
+      // Fullpage mode: scroll container to the target section index
+      const sections = Array.from(container.children) as HTMLElement[];
+      const sectionIndex = sections.findIndex((el) => el.querySelector(`#${id}`) !== null);
+
+      if (sectionIndex !== -1) {
+        container.scrollTo({
+          top: sectionIndex * container.clientHeight,
+          behavior: 'smooth',
+        });
+        return;
+      }
+    }
+
+    // Fallback for mobile / non-fullpage layout
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -101,7 +88,7 @@ export default function Header({ activeSection: externalActiveSection }: HeaderP
         {/* Social Icons */}
         <div className={styles.socials}>
           <a
-            href="https://github.com/kash-ts"
+            href={SOCIAL_LINKS.github}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
@@ -110,7 +97,7 @@ export default function Header({ activeSection: externalActiveSection }: HeaderP
             <FiGithub size={20} />
           </a>
           <a
-            href="https://linkedin.com"
+            href={SOCIAL_LINKS.services}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
@@ -119,7 +106,7 @@ export default function Header({ activeSection: externalActiveSection }: HeaderP
             <MdOutlineMonetizationOn size={24} />
           </a>
           <a
-            href="mailto:ipomainkra@gmail.com"
+            href={`mailto:${SOCIAL_LINKS.email}`}
             className={styles.socialLink}
             aria-label="Send email"
           >
@@ -156,13 +143,13 @@ export default function Header({ activeSection: externalActiveSection }: HeaderP
           ))}
         </ul>
         <div className={styles.mobileSocials}>
-          <a href="https://github.com/kash-ts" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <FiGithub size={22} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="Services">
+          <a href={SOCIAL_LINKS.services} target="_blank" rel="noopener noreferrer" aria-label="Services">
             <MdOutlineMonetizationOn size={26} />
           </a>
-          <a href="mailto:ipomainkra@gmail.com" aria-label="Email">
+          <a href={`mailto:${SOCIAL_LINKS.email}`} aria-label="Email">
             <FiMail size={22} />
           </a>
         </div>
