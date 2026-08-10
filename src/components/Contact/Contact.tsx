@@ -50,7 +50,7 @@ export default function Contact() {
     if (window.turnstile && turnstileRef.current && !widgetIdRef.current) {
       try {
         widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-          sitekey: '1x00000000000000000000AA', // Official Cloudflare Turnstile test sitekey
+          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA',
           theme: 'dark',
           callback: (token: string) => {
             setTurnstileToken(token);
