@@ -3,25 +3,29 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
-  SiReact,
   SiJavascript,
   SiTailwindcss,
   SiMongodb,
   SiTypescript,
-  SiNextdotjs,
   SiNodedotjs,
   SiGit,
+  SiDocker,
+  SiPython,
+  SiPostgresql,
+  SiCplusplus,
 } from 'react-icons/si';
 import styles from './TechStack.module.css';
 
 const technologies = [
-  { icon: SiReact, name: 'React', color: '#61DAFB', bg: '#0d1b2a' },
   { icon: SiJavascript, name: 'JavaScript', color: '#F7DF1E', bg: '#1a1a00' },
-  { icon: SiTailwindcss, name: 'Tailwind CSS', color: '#38BDF8', bg: '#0c1922' },
-  { icon: SiMongodb, name: 'MongoDB', color: '#4DB33D', bg: '#0d1a0c' },
   { icon: SiTypescript, name: 'TypeScript', color: '#3178C6', bg: '#0d1422' },
-  { icon: SiNextdotjs, name: 'Next.js', color: '#ffffff', bg: '#111111' },
+  { icon: SiPython, name: 'Python', color: '#3776AB', bg: '#0d1b2a' },
+  { icon: SiCplusplus, name: 'C++', color: '#00599C', bg: '#0a1526' },
+  { icon: SiDocker, name: 'Docker', color: '#2496ED', bg: '#0a192f' },
+  { icon: SiPostgresql, name: 'PostgreSQL', color: '#4169E1', bg: '#0c192c' },
+  { icon: SiMongodb, name: 'MongoDB', color: '#4DB33D', bg: '#0d1a0c' },
   { icon: SiNodedotjs, name: 'Node.js', color: '#68A063', bg: '#0d1a0c' },
+  { icon: SiTailwindcss, name: 'Tailwind CSS', color: '#38BDF8', bg: '#0c1922' },
   { icon: SiGit, name: 'Git', color: '#F05032', bg: '#1f0d08' },
 ];
 
@@ -69,8 +73,6 @@ export default function TechStack() {
               className={styles.card}
               style={{ '--card-bg': bg } as React.CSSProperties}
               variants={item}
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               <div className={styles.iconWrap} style={{ color }}>
                 <Icon size={42} aria-hidden="true" />

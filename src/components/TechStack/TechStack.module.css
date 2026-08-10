@@ -1,8 +1,9 @@
 .section {
   background: var(--color-bg-dark);
-  padding: var(--spacing-4xl) 0;
+  padding: var(--spacing-xl) 0;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 /* Background grid pattern */
@@ -43,8 +44,8 @@
 /* ---- Grid ---- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--spacing-md);
   position: relative;
   z-index: 1;
 }
@@ -54,39 +55,26 @@
   background: var(--card-bg, #131929);
   border: 1px solid var(--color-bg-dark-border);
   border-radius: var(--radius-xl);
-  padding: var(--spacing-xl) var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   cursor: default;
-  transition:
-    border-color var(--transition-base),
-    box-shadow var(--transition-base);
-}
-
-.card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
 .iconWrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
-  transition: background var(--transition-base);
-}
-
-.card:hover .iconWrap {
-  background: rgba(255, 255, 255, 0.07);
 }
 
 .name {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
   text-align: center;
@@ -94,27 +82,34 @@
 }
 
 /* ---- Responsive ---- */
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-md);
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
   }
 
   .card {
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-xs);
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 480px) {
   .grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-sm);
   }
 }
+

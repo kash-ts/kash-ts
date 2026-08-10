@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import styles from './Hero.module.css';
@@ -14,6 +15,32 @@ const fadeUp = {
 };
 
 export default function Hero() {
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+
+  useEffect(() => {
+    const container = document.getElementById('fullpage-container');
+    const handleScroll = () => {
+      const scrollTop = container ? container.scrollTop : window.scrollY;
+      if (scrollTop > 60) {
+        setShowScrollIndicator(false);
+      } else {
+        setShowScrollIndicator(true);
+      }
+    };
+
+    if (container) {
+      container.addEventListener('scroll', handleScroll, { passive: true });
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <section id="home" className={styles.hero}>
 
@@ -79,6 +106,38 @@ export default function Hero() {
         {/* Right: Stats Card */}
 
       </div>
+
+      {/* Scroll Down Mouse Indicator — visible only when at top */}
+      <motion.a
+        href="#about"
+        className={styles.scrollIndicator}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{
+          opacity: showScrollIndicator ? 1 : 0,
+          y: showScrollIndicator ? 0 : 15,
+        }}
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        style={{ pointerEvents: showScrollIndicator ? 'auto' : 'none' }}
+        aria-label="Скролл вниз"
+      >
+        <div className={styles.mouse}>
+          <motion.div
+            className={styles.wheel}
+            animate={{
+              y: [0, 0, 10],
+              opacity: [1, 1, 0],
+            }}
+            transition={{
+              duration: 2.4,
+              repeat: Infinity,
+              times: [0, 0.35, 1],
+              ease: ['linear', 'easeOut'],
+            }}
+          />
+        </div>
+      </motion.a>
     </section>
   );
 }
+
+
