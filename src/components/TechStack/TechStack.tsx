@@ -45,7 +45,7 @@ export default function TechStack() {
 
   return (
     <section id="skills" className={styles.section} ref={ref}>
-      <div className="container">
+      <div className={`container ${styles.inner}`}>
 
         {/* Heading */}
         <motion.div
