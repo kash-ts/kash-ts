@@ -41,7 +41,7 @@ const item = {
 
 export default function TechStack() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const isInView = useInView(ref, { once: false, margin: '-80px' });
 
   return (
     <section id="skills" className={styles.section} ref={ref}>
@@ -71,8 +71,6 @@ export default function TechStack() {
               className={styles.card}
               style={{ '--card-bg': bg } as React.CSSProperties}
               variants={item}
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               <div className={styles.iconWrap} style={{ color }}>
                 <Icon size={42} aria-hidden="true" />
