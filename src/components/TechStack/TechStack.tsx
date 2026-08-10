@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
   SiJavascript,
-  SiTailwindcss,
   SiMongodb,
   SiTypescript,
   SiNodedotjs,
@@ -25,7 +24,6 @@ const technologies = [
   { icon: SiPostgresql, name: 'PostgreSQL', color: '#4169E1', bg: '#0c192c' },
   { icon: SiMongodb, name: 'MongoDB', color: '#4DB33D', bg: '#0d1a0c' },
   { icon: SiNodedotjs, name: 'Node.js', color: '#68A063', bg: '#0d1a0c' },
-  { icon: SiTailwindcss, name: 'Tailwind CSS', color: '#38BDF8', bg: '#0c1922' },
   { icon: SiGit, name: 'Git', color: '#F05032', bg: '#1f0d08' },
 ];
 
@@ -73,6 +71,8 @@ export default function TechStack() {
               className={styles.card}
               style={{ '--card-bg': bg } as React.CSSProperties}
               variants={item}
+              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               <div className={styles.iconWrap} style={{ color }}>
                 <Icon size={42} aria-hidden="true" />

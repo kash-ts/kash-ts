@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import styles from './Hero.module.css';
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 15 },
   show: (delay = 0) => ({
     opacity: 1,
     y: 0,

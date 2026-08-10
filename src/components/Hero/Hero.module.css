@@ -1,11 +1,11 @@
 .hero {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   background: #e8ebf4;
   overflow: hidden;
-  padding-top: var(--header-height);
 }
 
 /* ---- Avatar: absolute background layer (centered by default) ---- */
@@ -186,7 +186,7 @@
 /* ---- Scroll Indicator ---- */
 .scrollIndicator {
   position: absolute;
-  bottom: 2rem;
+  bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -232,8 +232,8 @@
     left: auto;
     right: 0;
     transform: none;
-    width: 48%;
-    max-width: 750px;
+    width: 72%;
+    max-width: 1100px;
   }
 
   .avatarImage {
@@ -244,8 +244,8 @@
 /* Планшеты (769px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
   .avatarBg {
-    width: 45%;
-    opacity: 0.5;
+    width: 68%;
+    opacity: 0.6;
   }
 }
 
