@@ -8,7 +8,6 @@ import TechStack from '@/components/TechStack/TechStack';
 import Projects from '@/components/Projects/Projects';
 import Contact from '@/components/Contact/Contact';
 import FullpageWrapper from '@/components/Fullpage/FullpageWrapper';
-import SideNavigation from '@/components/Fullpage/SideNavigation';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home');
@@ -44,7 +43,6 @@ export default function Home() {
   return (
     <>
       <Header activeSection={activeSection} />
-      <SideNavigation activeSection={activeSection} />
       <FullpageWrapper>
         <Hero />
         <About />
