@@ -38,7 +38,7 @@ export default function FullpageWrapper({ children }: FullpageWrapperProps) {
 
       const currentScroll = container.scrollTop;
       const sectionHeight = container.clientHeight;
-      let currentIndex = Math.round(currentScroll / sectionHeight);
+      const currentIndex = Math.round(currentScroll / sectionHeight);
 
       const currentSection = sections[currentIndex];
 
