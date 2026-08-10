@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import styles from './Hero.module.css';
+import styles from './Home.module.css';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 15 },
@@ -11,15 +11,15 @@ const fadeUp = {
   }),
 };
 
-export default function Hero() {
+export default function Home() {
   return (
-    <section id="home" className={styles.hero}>
+    <section id="home" className={styles.home}>
 
       {/* Avatar — Full background layer */}
       <div className={styles.avatarBg}>
         <Image
           src="/images/hero-avatar.png"
-          alt="Михаил — Разработчик"
+          alt="Михаил — AI Аватар"
           fill
           priority
           unoptimized
@@ -48,9 +48,9 @@ export default function Hero() {
             custom={0.2}
             variants={fadeUp}
           >
-            Уверенный разработчик сайтов и чат ботов с опытом более 4 лет.
-            <br />
-            Чат боты для платформ: Telegram, VKontakte, Discord. Так же увереное владение Figma и Blender.
+            Разработчик npm-библиотек, автоматизаций, сайтов и чат-ботов с опытом
+            более 4 лет. Чат-боты для платформ: Telegram (mini app) и Discord.
+            Также уверенное владение Figma и Blender.
           </motion.p>
 
           <motion.div
@@ -65,9 +65,6 @@ export default function Hero() {
             </a>
           </motion.div>
         </div>
-
-        {/* Right: Stats Card */}
-
       </div>
     </section>
   );
