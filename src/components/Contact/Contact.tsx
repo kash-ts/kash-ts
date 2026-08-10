@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import Script from 'next/script';
 import { motion, useInView } from 'framer-motion';
 import { FiMail, FiGithub, FiCheckCircle } from 'react-icons/fi';
+import { SOCIAL_LINKS } from '@/config/social';
 import styles from './Contact.module.css';
 
 declare global {
@@ -24,6 +25,8 @@ declare global {
   }
 }
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: (delay = 0) => ({
@@ -33,12 +36,22 @@ const fadeUp = {
   }),
 };
 
+type FormErrors = {
+  name?: string;
+  email?: string;
+  message?: string;
+  turnstile?: string;
+};
+
+const validateEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
 export default function Contact() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const isInView = useInView(ref, { once: false, margin: '-80px' });
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string; turnstile?: string }>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [turnstileToken, setTurnstileToken] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -46,11 +59,11 @@ export default function Contact() {
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
 
-  const initTurnstile = () => {
+  const initTurnstile = useCallback(() => {
     if (window.turnstile && turnstileRef.current && !widgetIdRef.current) {
       try {
         widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA',
+          sitekey: TURNSTILE_SITE_KEY,
           theme: 'dark',
           callback: (token: string) => {
             setTurnstileToken(token);
@@ -68,23 +81,13 @@ export default function Contact() {
         console.error('Turnstile render error:', err);
       }
     }
-  };
-
-  useEffect(() => {
-    initTurnstile();
   }, []);
-
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email.trim());
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
-    const fieldKey = id.replace('contact-', '');
+    const fieldKey = id.replace('contact-', '') as keyof typeof formData;
     setFormData((prev) => ({ ...prev, [fieldKey]: value }));
 
-    // Real-time error clearance
     if (fieldKey === 'email') {
       if (!value.trim()) {
         setErrors((prev) => ({ ...prev, email: 'Введите email адрес' }));
@@ -103,7 +106,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors: { name?: string; email?: string; message?: string; turnstile?: string } = {};
+    const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
       newErrors.name = 'Пожалуйста, введите ваше имя';
@@ -125,13 +128,11 @@ export default function Contact() {
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) {
-      return;
-    }
+    if (Object.keys(newErrors).length > 0) return;
 
     setIsSubmitting(true);
 
-    // Simulate request send
+    // TODO: replace with real API call, e.g. fetch('/api/contact', { method: 'POST', body: ... })
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -169,15 +170,12 @@ export default function Contact() {
           </p>
 
           <div className={styles.links}>
-            <a
-              href="mailto:ipomainkra@gmail.com"
-              className={styles.link}
-            >
+            <a href={`mailto:${SOCIAL_LINKS.email}`} className={styles.link}>
               <FiMail size={18} className={styles.linkIcon} />
-              ipomainkra@gmail.com
+              {SOCIAL_LINKS.email}
             </a>
             <a
-              href="https://github.com/kash-ts"
+              href={SOCIAL_LINKS.github}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
@@ -198,7 +196,7 @@ export default function Contact() {
         >
           {isSubmitted ? (
             <div className={styles.successMessage}>
-              <FiCheckCircle size={28} style={{ marginBottom: 8, display: 'block', margin: '0 auto' }} />
+              <FiCheckCircle size={28} className={styles.successIcon} />
               Спасибо! Ваше сообщение успешно отправлено.
             </div>
           ) : (
