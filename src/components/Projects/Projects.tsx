@@ -11,56 +11,34 @@ interface Project {
   category: string;
   description: string;
   tags: string[];
-  githubUrl?: string;
-  demoUrl?: string;
+  github?: string;
+  link?: string;
 }
 
 const projectsData: Project[] = [
   {
     id: 1,
-    title: 'Telegram Бот-Сервис и Интегратор',
-    category: 'Telegram хуй',
-    description: 'Многофункциональный бот для авто-продаж, модерации каналов и приема платежей (ЮKassa, Crypto Pay). Поддержка админ-панели и уведомлений.',
-    tags: ['Python', 'Aiogram', 'PostgreSQL', 'Docker'],
-    githubUrl: 'https://github.com/kash-ts',
+    title: 'DonationAlerts SDK',
+    category: 'NPMJS',
+    description: 'Библиотека для бесшовной интеграции с API DonationAlerts. Она предоставляет полный набор инструментов для авторизации, управления пользовательскими токенами, получения данных учетной записи и обработки различных других взаимодействий с API.',
+    tags: ['TypeScript'],
+    github: 'https://github.com/kash-ts/alerts-SDK',
   },
   {
     id: 2,
-    title: 'VK & Discord Игровой Менеджер',
-    category: 'VK & Discord Bot',
-    description: 'Бот автоматизации сообществ с ролевой системой, авто-модерацией, экономикой и триггерными командами для Discord и VKontakte.',
-    tags: ['TypeScript', 'Node.js', 'Discord.js', 'VK API'],
-    githubUrl: 'https://github.com/kash-ts',
+    title: 'АТБ - Отслеживание курса',
+    category: 'Telegram',
+    description: 'Telegram-бот для отслеживания курсов валют (USD, EUR, CNY) с сайта АТБ (Азиатско-Тихоокеанский банк). Бот сохраняет курсы в локальную базу данных (SQLite) и каждый час отправляет пользователю уведомления об их изменении.',
+    tags: ['Python', 'SQLite'],
+    github: 'https://github.com/kash-ts/atb-currency-bot',
   },
   {
     id: 3,
-    title: 'Адаптивный Веб-Сайт & Портфолио',
-    category: 'Web App',
-    description: 'Высокопроизводительный веб-сайт с плавной навигацией, адаптивным дизайном под все устройства и поддержкой современной CSS-архитектуры.',
-    tags: ['Next.js', 'React', 'TypeScript', 'CSS Modules'],
-    githubUrl: 'https://github.com/kash-ts',
-    demoUrl: '#home',
-  },
-  {
-    id: 4,
-    title: '3D Визуализация & UI/UX Концепт',
-    category: 'Figma & Blender',
-    description: 'Разработка интерактивных 3D-моделей интерфейсов в Blender и создание продуманной UI/UX дизайн-системы в Figma.',
-    tags: ['Figma', 'Blender', '3D Design', 'UI/UX'],
-  },
-  {
-    id: 5,
-    title: '3ewwewe',
-    category: 'Web App',
-    description: 'Разработка интерактивных 3D-моделей интерфейсов в Blender и создание продуманной UI/UX дизайн-системы в Figma.',
-    tags: ['Figma', 'Blender', '3D Design', 'UI/UX'],
-  },
-  {
-    id: 6,
-    title: '3D Виewweffт',
-    category: 'Figma & Blender',
-    description: 'Разрабоfew3D-моделей интерфейсов в Blender и создание продуманной UI/UX дизайн-системы в Figma.',
-    tags: ['Figma', 'Blender', '3D Design', 'UI/UX'],
+    title: 'Schedule in notifications',
+    category: 'Kotlin & Android',
+    description: 'Простое Android-приложение, написанное на Kotlin, для отображения пользовательского расписания занятий и задач в постоянных уведомлениях (Foreground Service Notification).',
+    tags: ['Kotlin', 'Android'],
+    github: 'https://github.com/kash-ts/schedule-in-notifications',
   },
 ];
 
@@ -131,9 +109,9 @@ export default function Projects() {
                   <FiFolder size={24} />
                 </span>
                 <div className={styles.links}>
-                  {project.githubUrl && (
+                  {project.github && (
                     <a
-                      href={project.githubUrl}
+                      href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.iconLink}
@@ -142,9 +120,9 @@ export default function Projects() {
                       <FiGithub size={18} />
                     </a>
                   )}
-                  {project.demoUrl && (
+                  {project.link && (
                     <a
-                      href={project.demoUrl}
+                      href={project.link}
                       className={styles.iconLink}
                       aria-label="Live Demo"
                     >
