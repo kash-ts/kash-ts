@@ -19,7 +19,7 @@ const projectsData: Project[] = [
   {
     id: 1,
     title: 'Telegram Бот-Сервис и Интегратор',
-    category: 'Telegram Bot',
+    category: 'Telegram хуй',
     description: 'Многофункциональный бот для авто-продаж, модерации каналов и приема платежей (ЮKassa, Crypto Pay). Поддержка админ-панели и уведомлений.',
     tags: ['Python', 'Aiogram', 'PostgreSQL', 'Docker'],
     githubUrl: 'https://github.com/kash-ts',
@@ -48,9 +48,23 @@ const projectsData: Project[] = [
     description: 'Разработка интерактивных 3D-моделей интерфейсов в Blender и создание продуманной UI/UX дизайн-системы в Figma.',
     tags: ['Figma', 'Blender', '3D Design', 'UI/UX'],
   },
+  {
+    id: 5,
+    title: '3ewwewe',
+    category: 'Web App',
+    description: 'Разработка интерактивных 3D-моделей интерфейсов в Blender и создание продуманной UI/UX дизайн-системы в Figma.',
+    tags: ['Figma', 'Blender', '3D Design', 'UI/UX'],
+  },
+  {
+    id: 6,
+    title: '3D Виewweffт',
+    category: 'Figma & Blender',
+    description: 'Разрабоfew3D-моделей интерфейсов в Blender и создание продуманной UI/UX дизайн-системы в Figma.',
+    tags: ['Figma', 'Blender', '3D Design', 'UI/UX'],
+  },
 ];
 
-const categories = ['Все', 'Telegram Bot', 'VK & Discord Bot', 'Web App', 'Figma & Blender'];
+const categories = ['Все', ...Array.from(new Set(projectsData.map((p) => p.category)))];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -73,7 +87,7 @@ export default function Projects() {
   return (
     <section id="works" className={styles.section} ref={ref}>
       <div className={`container ${styles.inner}`}>
-        
+
         {/* Header */}
         <motion.div
           className={styles.header}
