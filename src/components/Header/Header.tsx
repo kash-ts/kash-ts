@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FiGithub, FiMail } from 'react-icons/fi';
+import { MdOutlineMonetizationOn } from 'react-icons/md';
 import styles from './Header.module.css';
 
 const navLinks = [
@@ -13,10 +14,16 @@ const navLinks = [
   { href: '#contact', label: 'Контакты' },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  activeSection?: string;
+}
+
+export default function Header({ activeSection: externalActiveSection }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [internalActiveSection, setInternalActiveSection] = useState('home');
+
+  const activeSection = externalActiveSection ?? internalActiveSection;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,10 +33,43 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
+  // IntersectionObserver to update active section on scroll if external activeSection is not provided
+  useEffect(() => {
+    if (externalActiveSection !== undefined) return;
+
+    const sectionIds = ['home', 'about', 'skills', 'works', 'contact'];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInternalActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        threshold: 0.3,
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, [externalActiveSection]);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
     setMenuOpen(false);
     const id = href.replace('#', '');
-    setActiveSection(id);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -49,7 +89,7 @@ export default function Header() {
                 <a
                   href={href}
                   className={`${styles.navLink} ${activeSection === href.replace('#', '') ? styles.active : ''}`}
-                  onClick={() => handleNavClick(href)}
+                  onClick={(e) => handleNavClick(e, href)}
                 >
                   {label}
                 </a>
@@ -74,9 +114,9 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
-            aria-label="LinkedIn profile"
+            aria-label="Services"
           >
-            <FiLinkedin size={20} />
+            <MdOutlineMonetizationOn size={24} />
           </a>
           <a
             href="mailto:ipomainkra@gmail.com"
@@ -108,7 +148,7 @@ export default function Header() {
               <a
                 href={href}
                 className={styles.mobileNavLink}
-                onClick={() => handleNavClick(href)}
+                onClick={(e) => handleNavClick(e, href)}
               >
                 {label}
               </a>
@@ -119,8 +159,8 @@ export default function Header() {
           <a href="https://github.com/kash-ts" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <FiGithub size={22} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <FiLinkedin size={22} />
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="Services">
+            <MdOutlineMonetizationOn size={26} />
           </a>
           <a href="mailto:ipomainkra@gmail.com" aria-label="Email">
             <FiMail size={22} />

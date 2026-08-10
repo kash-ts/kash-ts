@@ -55,6 +55,14 @@
   padding: 0;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
