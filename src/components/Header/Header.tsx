@@ -97,11 +97,11 @@ export default function Header({ activeSection }: HeaderProps) {
             <FiGithub size={20} />
           </a>
           <a
-            href={SOCIAL_LINKS.services}
+            href={SOCIAL_LINKS.donations}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
-            aria-label="Services"
+            aria-label="Поддержать (DonationAlerts)"
           >
             <MdOutlineMonetizationOn size={24} />
           </a>
@@ -146,7 +146,7 @@ export default function Header({ activeSection }: HeaderProps) {
           <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <FiGithub size={22} />
           </a>
-          <a href={SOCIAL_LINKS.services} target="_blank" rel="noopener noreferrer" aria-label="Services">
+          <a href={SOCIAL_LINKS.donations} target="_blank" rel="noopener noreferrer" aria-label="Поддержать (DonationAlerts)">
             <MdOutlineMonetizationOn size={26} />
           </a>
           <a href={`mailto:${SOCIAL_LINKS.email}`} aria-label="Email">
