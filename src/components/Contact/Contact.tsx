@@ -5,6 +5,7 @@ import Script from 'next/script';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { FiCheckCircle } from 'react-icons/fi';
+import { env } from '@/config/env';
 import styles from './Contact.module.css';
 
 declare global {
@@ -25,7 +26,7 @@ declare global {
   }
 }
 
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const TURNSTILE_SITE_KEY = env.turnstileSiteKey;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -92,7 +93,7 @@ export default function Contact() {
       if (!value.trim()) {
         setErrors((prev) => ({ ...prev, email: 'Введите email адрес' }));
       } else if (!validateEmail(value)) {
-        setErrors((prev) => ({ ...prev, email: 'Некорректный формат email (например, user@domain.com)' }));
+        setErrors((prev) => ({ ...prev, email: 'Некорректный формат email' }));
       } else {
         setErrors((prev) => ({ ...prev, email: undefined }));
       }
@@ -115,7 +116,7 @@ export default function Contact() {
     if (!formData.email.trim()) {
       newErrors.email = 'Пожалуйста, введите email адрес';
     } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Некорректный формат email (например, user@domain.com)';
+      newErrors.email = 'Некорректный формат email';
     }
 
     if (!formData.message.trim()) {
@@ -207,7 +208,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleInputChange}
                     className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                    placeholder="you@example.com"
+                    placeholder="email@example.com"
                   />
                   {errors.email && <span className={styles.errorText}>{errors.email}</span>}
                 </div>

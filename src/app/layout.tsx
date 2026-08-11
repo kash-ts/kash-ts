@@ -3,22 +3,47 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
   variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: 'Portfolio — Frontend Developer',
+  title: 'Михаил — Fullstack & Automation Developer',
   description:
-    'Personal portfolio of a Frontend Developer specializing in React, TypeScript and modern web technologies.',
-  keywords: ['portfolio', 'frontend', 'developer', 'react', 'typescript', 'nextjs'],
-  authors: [{ name: 'Portfolio' }],
+    'Портфолио разработчика npm-библиотек, веб-сайтов, автоматизаций и чат-ботов с опытом более 4 лет. Проекты на React, Next.js, TypeScript, Python, Telegram Mini Apps, Figma и Blender.',
+  keywords: [
+    'fullstack',
+    'react',
+    'nextjs',
+    'typescript',
+    'python',
+    'telegram bot',
+    'discord bot',
+    'npm',
+    'figma',
+  ],
+  authors: [{ name: 'Михаил', url: 'https://github.com/kash-ts' }],
+  creator: 'Михаил',
   openGraph: {
-    title: 'Portfolio — Frontend Developer',
-    description: 'Personal portfolio of a Frontend Developer.',
+    title: 'Михаил — Fullstack & Automation Developer | Портфолио',
+    description:
+      'Разработка npm-библиотек, автоматизаций, сайтов и чат-ботов с опытом более 4 лет. Telegram (mini app), Discord, Figma & Blender.',
+    url: 'https://github.com/kash-ts',
+    siteName: 'Портфолио разработчика',
+    locale: 'ru_RU',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Михаил — Fullstack & Automation Developer',
+    description:
+      'Разработка npm-библиотек, веб-сайтов, автоматизаций и чат-ботов с опытом более 4 лет.',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -28,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="ru" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

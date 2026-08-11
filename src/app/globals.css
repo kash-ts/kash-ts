@@ -5,7 +5,6 @@
   --color-accent: #475569;
   --color-accent-hover: #334155;
   --color-bg-light: #e8ebf4;
-  --color-bg-white: #e8ebf4;
   --color-bg-dark: #0a0e1a;
   --color-bg-dark-card: #131929;
   --color-bg-dark-border: #1e2d4a;
@@ -60,7 +59,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  background: var(--color-bg-light);
 }
 
 html {
@@ -120,7 +119,8 @@ main {
 
 @media (max-width: 1440px) {
   :root {
-    --page-padding-x: calc(7rem / 1.5); /* 4.66rem - уменьшено в 1.5 раза */
+    --page-padding-x: calc(7rem / 1.5);
+    /* 4.66rem - уменьшено в 1.5 раза */
   }
 }
 

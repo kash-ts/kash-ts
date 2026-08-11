@@ -5,15 +5,10 @@
   right: 0;
   z-index: 1000;
   height: var(--header-height);
-  background: #e8ebf4;
   border-bottom: 1px solid rgba(71, 85, 105, 0.12);
-  transition:
-    background var(--transition-base),
-    box-shadow var(--transition-base);
 }
 
 .header.scrolled {
-  background: #e8ebf4;
   box-shadow: var(--shadow-sm);
 }
 
