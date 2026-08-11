@@ -11,8 +11,6 @@
   flex-direction: column;
   gap: var(--spacing-md);
   margin: auto 0;
-  padding-top: var(--section-padding-top);
-  padding-bottom: var(--section-padding-bottom);
 }
 
 .header {

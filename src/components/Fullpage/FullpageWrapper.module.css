@@ -37,6 +37,9 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px), (max-height: 650px) {

@@ -11,8 +11,6 @@
   justify-content: center;
   width: 100%;
   margin: auto 0;
-  padding-top: var(--section-padding-top);
-  padding-bottom: var(--section-padding-bottom);
 }
 
 /* ---- Card Side ---- */
@@ -83,4 +81,3 @@
     padding: var(--spacing-lg);
   }
 }
-

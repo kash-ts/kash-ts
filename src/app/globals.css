@@ -40,8 +40,8 @@
 
   --header-height: 70px;
   --page-padding-x: 7rem;
-  --section-padding-top: calc(var(--header-height) + 1rem);
-  --section-padding-bottom: 1.25rem;
+  --section-padding-top: calc(var(--header-height) + 0.5rem);
+  --section-padding-bottom: 0.625rem;
   --hero-padding-top: 1.5rem;
   --container-max: 1200px;
   --container-padding: 1.5rem;
