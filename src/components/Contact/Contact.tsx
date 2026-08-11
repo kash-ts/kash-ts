@@ -2,9 +2,9 @@
 
 import { useRef, useState, useCallback } from 'react';
 import Script from 'next/script';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { FiMail, FiGithub, FiCheckCircle } from 'react-icons/fi';
-import { SOCIAL_LINKS } from '@/config/social';
+import { FiCheckCircle } from 'react-icons/fi';
 import styles from './Contact.module.css';
 
 declare global {
@@ -60,11 +60,11 @@ export default function Contact() {
   const widgetIdRef = useRef<string | null>(null);
 
   const initTurnstile = useCallback(() => {
-    if (window.turnstile && turnstileRef.current && !widgetIdRef.current) {
+    if (TURNSTILE_SITE_KEY && window.turnstile && turnstileRef.current && !widgetIdRef.current) {
       try {
         widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
           sitekey: TURNSTILE_SITE_KEY,
-          theme: 'dark',
+          theme: 'light',
           callback: (token: string) => {
             setTurnstileToken(token);
             setErrors((prev) => ({ ...prev, turnstile: undefined }));
@@ -122,7 +122,7 @@ export default function Contact() {
       newErrors.message = 'Пожалуйста, введите сообщение';
     }
 
-    if (!turnstileToken) {
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
       newErrors.turnstile = 'Пройдите проверку Cloudflare Turnstile перед отправкой';
     }
 
@@ -132,7 +132,6 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    // TODO: replace with real API call, e.g. fetch('/api/contact', { method: 'POST', body: ... })
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -147,114 +146,123 @@ export default function Contact() {
   return (
     <section id="contact" className={styles.section} ref={ref}>
       {/* Cloudflare Turnstile Explicit API Script */}
-      <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-        onLoad={initTurnstile}
-        strategy="afterInteractive"
-      />
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          onLoad={initTurnstile}
+          strategy="afterInteractive"
+        />
+      )}
 
       <div className={`container ${styles.inner}`}>
 
-        {/* Left: info */}
+        {/* Top Header */}
         <motion.div
-          className={styles.lead}
+          className={styles.header}
           initial="hidden"
           animate={isInView ? 'show' : 'hidden'}
           custom={0}
           variants={fadeUp}
         >
           <h2 className={styles.title}>Свяжитесь со мной</h2>
-          <p className={styles.subtitle}>
-            Открыт к новым проектам и предложениям о сотрудничестве.
-            Напишите — отвечу в течение дня.
-          </p>
-
-          <div className={styles.links}>
-            <a href={`mailto:${SOCIAL_LINKS.email}`} className={styles.link}>
-              <FiMail size={18} className={styles.linkIcon} />
-              {SOCIAL_LINKS.email}
-            </a>
-            <a
-              href={SOCIAL_LINKS.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
-            >
-              <FiGithub size={18} className={styles.linkIcon} />
-              github.com/kash-ts
-            </a>
-          </div>
+          <p className={styles.subtitle}>Напишите — отвечу в течение дня.</p>
         </motion.div>
 
-        {/* Right: form */}
-        <motion.div
-          className={styles.card}
-          initial="hidden"
-          animate={isInView ? 'show' : 'hidden'}
-          custom={0.1}
-          variants={fadeUp}
-        >
-          {isSubmitted ? (
-            <div className={styles.successMessage}>
-              <FiCheckCircle size={28} className={styles.successIcon} />
-              Спасибо! Ваше сообщение успешно отправлено.
+        {/* Bottom Content Grid */}
+        <div className={styles.grid}>
+
+          {/* Left: form */}
+          <motion.div
+            className={styles.card}
+            initial="hidden"
+            animate={isInView ? 'show' : 'hidden'}
+            custom={0.1}
+            variants={fadeUp}
+          >
+            {isSubmitted ? (
+              <div className={styles.successMessage}>
+                <FiCheckCircle size={28} className={styles.successIcon} />
+                Спасибо! Ваше сообщение успешно отправлено.
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate>
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="contact-name">Имя</label>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+                    placeholder="Ваше имя"
+                  />
+                  {errors.name && <span className={styles.errorText}>{errors.name}</span>}
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="contact-email">Email</label>
+                  <input
+                    id="contact-email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                    placeholder="you@example.com"
+                  />
+                  {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="contact-message">Сообщение</label>
+                  <textarea
+                    id="contact-message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
+                    placeholder="Расскажите о вашем проекте..."
+                  />
+                  {errors.message && <span className={styles.errorText}>{errors.message}</span>}
+                </div>
+
+                {/* Cloudflare Turnstile Container */}
+                {TURNSTILE_SITE_KEY ? (
+                  <div className={styles.turnstileContainer}>
+                    <div ref={turnstileRef} />
+                  </div>
+                ) : null}
+                {errors.turnstile && <span className={styles.errorText}>{errors.turnstile}</span>}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={styles.btn}
+                >
+                  {isSubmitting ? 'Отправка...' : 'Отправить'}
+                </button>
+              </form>
+            )}
+          </motion.div>
+
+          {/* Right: avatar placeholder */}
+          <motion.div
+            className={styles.avatarContainer}
+            initial="hidden"
+            animate={isInView ? 'show' : 'hidden'}
+            custom={0.2}
+            variants={fadeUp}
+          >
+            <div className={styles.avatarCard}>
+              <Image
+                src="/images/contact-avatar.png"
+                alt="Михаил — Контакты"
+                fill
+                unoptimized
+                className={styles.avatarImage}
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate>
-              <div className={styles.field}>
-                <label className={styles.label} htmlFor="contact-name">Имя</label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                  placeholder="Ваше имя"
-                />
-                {errors.name && <span className={styles.errorText}>{errors.name}</span>}
-              </div>
+          </motion.div>
 
-              <div className={styles.field}>
-                <label className={styles.label} htmlFor="contact-email">Email</label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                  placeholder="you@example.com"
-                />
-                {errors.email && <span className={styles.errorText}>{errors.email}</span>}
-              </div>
-
-              <div className={styles.field}>
-                <label className={styles.label} htmlFor="contact-message">Сообщение</label>
-                <textarea
-                  id="contact-message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                  placeholder="Расскажите о вашем проекте..."
-                />
-                {errors.message && <span className={styles.errorText}>{errors.message}</span>}
-              </div>
-
-              {/* Cloudflare Turnstile Container */}
-              <div className={styles.turnstileContainer}>
-                <div ref={turnstileRef} />
-              </div>
-              {errors.turnstile && <span className={styles.errorText}>{errors.turnstile}</span>}
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={styles.btn}
-              >
-                {isSubmitting ? 'Отправка...' : 'Отправить'}
-              </button>
-            </form>
-          )}
-        </motion.div>
+        </div>
 
       </div>
     </section>

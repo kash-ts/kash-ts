@@ -7,72 +7,84 @@
 }
 
 .inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-3xl);
-  align-items: start;
-  margin: auto 0;
-  padding-top: var(--section-padding-top);
-  padding-bottom: var(--section-padding-bottom);
-}
-
-/* ---- Left: text ---- */
-.lead {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
+  margin: auto 0;
+  padding-bottom: calc(var(--section-padding-bottom) * 2);
+}
+
+/* ---- Top Header ---- */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--spacing-xs);
 }
 
 .title {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
   font-weight: 800;
   color: var(--color-text-primary);
+  line-height: 1.2;
   letter-spacing: -0.02em;
-  line-height: 1.15;
 }
 
 .subtitle {
   font-size: 1rem;
   color: var(--color-text-secondary);
-  line-height: 1.8;
-  max-width: 440px;
+  line-height: 1.6;
+  max-width: 600px;
 }
 
-.links {
+/* ---- Bottom Grid ---- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: end;
+  position: relative;
+}
+
+/* ---- Right: Avatar Container ---- */
+.avatarContainer {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 10;
 }
 
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  text-decoration: none;
-  transition: color var(--transition-base);
+.avatarCard {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 525px;
+  overflow: visible;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10;
 }
 
-.link:hover {
-  color: var(--color-accent);
+.avatarImage {
+  object-fit: contain;
+  object-position: bottom center;
 }
 
-.linkIcon {
-  color: var(--color-accent);
-  flex-shrink: 0;
-}
-
-/* ---- Right: card ---- */
+/* ---- Left: card (form) ---- */
 .card {
-  background: var(--color-bg-dark-card);
-  border: 1px solid var(--color-bg-dark-border);
+  background: #ffffff;
+  border: 1px solid rgba(71, 85, 105, 0.12);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  box-shadow: var(--shadow-md);
 }
 
 .field {
@@ -84,21 +96,21 @@
 .label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .input,
 .textarea {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--color-bg-dark-border);
+  background: #f8fafc;
+  border: 1px solid rgba(71, 85, 105, 0.2);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
-  color: #ffffff;
+  color: var(--color-text-primary);
   outline: none;
-  transition: border-color var(--transition-base);
+  transition: border-color var(--transition-base), background var(--transition-base);
   font-family: inherit;
   width: 100%;
   box-sizing: border-box;
@@ -106,11 +118,12 @@
 
 .input::placeholder,
 .textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-muted);
 }
 
 .input:focus,
 .textarea:focus {
+  background: #ffffff;
   border-color: var(--color-accent);
 }
 
@@ -151,22 +164,26 @@
 
 .errorText {
   font-size: 0.75rem;
-  color: #f87171;
+  color: #dc2626;
   font-weight: 500;
   margin-top: 2px;
 }
 
 .turnstileContainer {
   margin: var(--spacing-xs) 0;
-  min-height: 65px;
   display: flex;
   justify-content: flex-start;
 }
 
+.turnstileContainer:empty {
+  display: none;
+  margin: 0;
+}
+
 .successMessage {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  color: #4ade80;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #15803d;
   border-radius: var(--radius-md);
   padding: 1rem;
   font-size: 0.9rem;
@@ -184,7 +201,7 @@
 
 /* ---- Responsive ---- */
 @media (max-width: 900px) {
-  .inner {
+  .grid {
     grid-template-columns: 1fr;
   }
 
