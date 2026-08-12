@@ -5,6 +5,7 @@ import { motion, useInView } from 'framer-motion';
 import { FiExternalLink, FiGithub, FiFolder } from 'react-icons/fi';
 import styles from './Projects.module.css';
 
+// Project data interface
 interface Project {
   id: number;
   title: string;
@@ -15,6 +16,7 @@ interface Project {
   link?: string;
 }
 
+// Portfolio projects list
 const projectsData: Project[] = [
   {
     id: 1,
@@ -42,8 +44,10 @@ const projectsData: Project[] = [
   },
 ];
 
+// Unique categories for filtering
 const categories = ['Все', ...Array.from(new Set(projectsData.map((p) => p.category)))];
 
+// Fade up animation variants for project cards
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: (i: number) => ({
@@ -66,7 +70,7 @@ export default function Projects() {
     <section id="works" className={styles.section} ref={ref}>
       <div className={`container ${styles.inner}`}>
 
-        {/* Header */}
+        {/* Section header and filter tabs */}
         <motion.div
           className={styles.header}
           initial={{ opacity: 0, y: 20 }}
@@ -74,11 +78,8 @@ export default function Projects() {
           transition={{ duration: 0.5 }}
         >
           <h2 className={styles.title}>Мои проекты</h2>
-          <p className={styles.subtitle}>
-            Сайты, чат-боты для Telegram, VK, Discord и 3D дизайн-решения.
-          </p>
 
-          {/* Filter Tabs */}
+          {/* Project filter buttons */}
           <div className={styles.filters}>
             {categories.map((cat) => (
               <button
@@ -93,7 +94,7 @@ export default function Projects() {
           </div>
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* Project cards grid */}
         <div className={styles.grid}>
           {filteredProjects.map((project, idx) => (
             <motion.article

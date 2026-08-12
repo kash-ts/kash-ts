@@ -15,6 +15,7 @@ import {
 } from 'react-icons/si';
 import styles from './TechStack.module.css';
 
+// Tech stack technology list
 const technologies = [
   { icon: SiJavascript, name: 'JavaScript', color: '#F7DF1E', bg: '#1a1a00' },
   { icon: SiTypescript, name: 'TypeScript', color: '#3178C6', bg: '#0d1422' },
@@ -27,6 +28,7 @@ const technologies = [
   { icon: SiGit, name: 'Git', color: '#F05032', bg: '#1f0d08' },
 ];
 
+// Container and item animation variants
 const container = {
   hidden: {},
   show: {
@@ -47,7 +49,7 @@ export default function TechStack() {
     <section id="skills" className={styles.section} ref={ref}>
       <div className={`container ${styles.inner}`}>
 
-        {/* Heading */}
+        {/* Section header */}
         <motion.div
           className={styles.heading}
           initial={{ opacity: 0, y: 20 }}
@@ -55,10 +57,9 @@ export default function TechStack() {
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           <h2 className={styles.title}>Мой стек технологий</h2>
-          <p className={styles.subtitle}>Технологии, с которыми я работаю</p>
         </motion.div>
 
-        {/* Grid */}
+        {/* Technology cards grid */}
         <motion.div
           className={styles.grid}
           variants={container}
