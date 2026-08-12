@@ -1,25 +1,31 @@
-const requiredEnvVars = [
-  'NEXT_PUBLIC_TURNSTILE_SITE_KEY',
-  'NEXT_PUBLIC_SITE_URL',
-] as const;
+// Application environment variables configuration
 
-function validateEnv() {
-  const missingVars = requiredEnvVars.filter(
-    (key) => !process.env[key] || process.env[key]?.trim() === ''
-  );
-
-  if (missingVars.length > 0) {
-    throw new Error(
-      `\n❌ [FATAL ERROR] Отсутствуют обязательные переменные окружения (.env):\n` +
-        missingVars.map((v) => `  - ${v}`).join('\n') +
-        `\n\nПожалуйста, укажите их в файле .env.local или переменных окружения перед запуском проекта.\n`
-    );
+function cleanValue(val: string | undefined): string {
+  if (!val || val.trim() === '') {
+    return '';
   }
+  return val.replace(/^["']|["']$/g, '');
 }
 
-validateEnv();
+const turnstileSiteKey = cleanValue(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+const siteUrl = cleanValue(process.env.NEXT_PUBLIC_SITE_URL);
+const apiUrl = cleanValue(process.env.NEXT_PUBLIC_API_URL);
+
+const missingVars: string[] = [];
+if (!turnstileSiteKey) missingVars.push('NEXT_PUBLIC_TURNSTILE_SITE_KEY');
+if (!siteUrl) missingVars.push('NEXT_PUBLIC_SITE_URL');
+if (!apiUrl) missingVars.push('NEXT_PUBLIC_API_URL');
+
+if (missingVars.length > 0) {
+  throw new Error(
+    `\n[FATAL ERROR] Missing required environment variables in .env:\n` +
+      missingVars.map((v) => `  - ${v}`).join('\n') +
+      `\n\nPlease specify them in your .env configuration file before starting.\n`
+  );
+}
 
 export const env = {
-  turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL!,
+  turnstileSiteKey,
+  siteUrl,
+  apiUrl,
 } as const;
