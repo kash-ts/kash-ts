@@ -102,6 +102,7 @@ export default function Contact() {
       console.error('Failed to save form draft to localStorage:', err);
     }
 
+    // Dynamic field validation and error clearing on input change
     if (fieldKey === 'email') {
       if (!cleanedValue.trim()) {
         setErrors((prev) => ({ ...prev, email: 'Введите email адрес' }));
@@ -132,6 +133,21 @@ export default function Contact() {
       }
     }
   };
+
+  // Check form completeness and validity for submit button state
+  const isNameValid = formData.name.trim().length >= 2;
+  const isEmailValid = validateEmail(formData.email);
+  const isMessageValid = formData.message.trim().length >= MIN_MESSAGE_LENGTH;
+  const isCaptchaValid = Boolean(!CAPTCHA_SITE_KEY || captchaToken);
+  const hasNoClientErrors = !errors.name && !errors.email && !errors.message && !errors.captcha;
+
+  const isSubmitDisabled =
+    !isNameValid ||
+    !isEmailValid ||
+    !isMessageValid ||
+    !isCaptchaValid ||
+    !hasNoClientErrors ||
+    isSubmitting;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -293,7 +309,7 @@ export default function Contact() {
                   onChange={handleInputChange}
                   maxLength={MAX_MESSAGE_LENGTH}
                   className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                  placeholder="Расскажите о вашем проекте (минимум 50 символов)"
+                  placeholder="Расскажите о вашем проекте (минимум 50 символов)..."
                 />
                 {errors.message && <span className={styles.errorText}>{errors.message}</span>}
               </div>
@@ -321,7 +337,7 @@ export default function Contact() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitDisabled}
                 className={styles.btn}
               >
                 {isSubmitting ? 'Отправка...' : 'Отправить'}
