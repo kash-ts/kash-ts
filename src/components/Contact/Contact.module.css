@@ -18,6 +18,7 @@
   align-items: center;
   text-align: center;
   gap: var(--spacing-xs);
+  margin-bottom: 0.850rem;
 }
 
 .title {
@@ -141,8 +142,10 @@
 }
 
 .textarea {
-  resize: none;
+  resize: vertical;
   min-height: 120px;
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 .btn {

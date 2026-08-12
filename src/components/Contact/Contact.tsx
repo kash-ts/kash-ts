@@ -198,7 +198,7 @@ export default function Contact() {
 
     try {
       const baseUrl = env.apiUrl.replace(/\/$/, '');
-      const endpoint = `${baseUrl}/api/message/new/`;
+      const endpoint = `${baseUrl}/api/messages/new/`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -246,7 +246,7 @@ export default function Contact() {
           custom={0}
           variants={fadeUp}
         >
-          <h2 className={styles.title}>Свяжитесь со мной</h2>
+          <h2 className={styles.title}>Обратная связь</h2>
           <p className={styles.subtitle}>Напишите — отвечу в течение дня.</p>
         </motion.div>
 
@@ -340,7 +340,7 @@ export default function Contact() {
                 disabled={isSubmitDisabled}
                 className={styles.btn}
               >
-                {isSubmitting ? 'Отправка...' : 'Отправить'}
+                Отправить сообщение
               </button>
             </form>
           </motion.div>
