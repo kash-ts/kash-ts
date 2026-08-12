@@ -10,6 +10,7 @@ function cleanValue(val: string | undefined): string {
 const turnstileSiteKey = cleanValue(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
 const siteUrl = cleanValue(process.env.NEXT_PUBLIC_SITE_URL);
 const apiUrl = cleanValue(process.env.NEXT_PUBLIC_API_URL);
+const yandexMetrikaId = cleanValue(process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID);
 
 const missingVars: string[] = [];
 if (!turnstileSiteKey) missingVars.push('NEXT_PUBLIC_TURNSTILE_SITE_KEY');
@@ -28,4 +29,5 @@ export const env = {
   turnstileSiteKey,
   siteUrl,
   apiUrl,
+  yandexMetrikaId,
 } as const;

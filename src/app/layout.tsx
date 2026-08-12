@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import ToastProvider from '@/components/Providers/ToastProvider';
+import YandexMetrika from '@/components/Analytics/YandexMetrika';
 import './globals.css';
 
 // Load Inter font with cyrillic and latin subsets
@@ -68,6 +69,7 @@ export default function RootLayout({
       <body>
         {children}
         <ToastProvider />
+        <YandexMetrika />
       </body>
     </html>
   );
