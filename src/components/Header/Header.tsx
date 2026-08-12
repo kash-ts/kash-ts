@@ -7,6 +7,7 @@ import { MdOutlineMonetizationOn } from 'react-icons/md';
 import { SOCIAL_LINKS } from '@/config/social';
 import styles from './Header.module.css';
 
+// Navigation link items
 const navLinks = [
   { href: '#home', label: 'Главная' },
   { href: '#about', label: 'О себе' },
@@ -23,6 +24,7 @@ export default function Header({ activeSection }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Track scroll position for header style updates
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -31,6 +33,7 @@ export default function Header({ activeSection }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Smooth scroll navigation handler
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMenuOpen(false);
@@ -39,7 +42,7 @@ export default function Header({ activeSection }: HeaderProps) {
     const container = document.getElementById('fullpage-container');
 
     if (container) {
-      // Fullpage mode: scroll container to the target section index
+      // Fullpage scroll mode: scroll container to section
       const sections = Array.from(container.children) as HTMLElement[];
       const sectionIndex = sections.findIndex((el) => el.querySelector(`#${id}`) !== null);
 
@@ -52,7 +55,7 @@ export default function Header({ activeSection }: HeaderProps) {
       }
     }
 
-    // Fallback for mobile / non-fullpage layout
+    // Fallback smooth scroll for mobile or standard mode
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -68,7 +71,7 @@ export default function Header({ activeSection }: HeaderProps) {
           <span className={styles.logoText}>Portfolio</span>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop navigation */}
         <nav className={styles.nav} aria-label="Main navigation">
           <ul className={styles.navList}>
             {navLinks.map(({ href, label }) => (
@@ -85,7 +88,7 @@ export default function Header({ activeSection }: HeaderProps) {
           </ul>
         </nav>
 
-        {/* Social Icons */}
+        {/* Social links */}
         <div className={styles.socials}>
           <a
             href={SOCIAL_LINKS.github}
@@ -114,7 +117,7 @@ export default function Header({ activeSection }: HeaderProps) {
           </a>
         </div>
 
-        {/* Mobile Burger */}
+        {/* Mobile menu toggle (burger) */}
         <button
           className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ''}`}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -127,7 +130,7 @@ export default function Header({ activeSection }: HeaderProps) {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile dropdown menu */}
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`} aria-hidden={!menuOpen}>
         <ul className={styles.mobileNavList}>
           {navLinks.map(({ href, label }) => (

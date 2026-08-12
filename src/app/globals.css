@@ -120,7 +120,7 @@ main {
 @media (max-width: 1440px) {
   :root {
     --page-padding-x: calc(7rem / 1.5);
-    /* 4.66rem - уменьшено в 1.5 раза */
+    /* 4.66rem - scaled down by 1.5x */
   }
 }
 

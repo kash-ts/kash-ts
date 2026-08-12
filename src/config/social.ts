@@ -1,5 +1,6 @@
+// Global social links and contact configuration
 export const SOCIAL_LINKS = {
   github: 'https://github.com/kash-ts',
-  donations: 'https://www.donationalerts.com/r/k_team',
-  email: 'ipomainkra@gmail.com',
+  email: 'mailto:ipomainkra@gmail.com',
+  donations: 'https://www.donationalerts.com/r/k-team',
 } as const;

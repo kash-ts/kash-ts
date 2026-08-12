@@ -10,8 +10,10 @@ import Contact from '@/components/Contact/Contact';
 import FullpageWrapper from '@/components/Fullpage/FullpageWrapper';
 
 export default function Home() {
+  // Active page section state for highlighting navigation items
   const [activeSection, setActiveSection] = useState('home');
 
+  // Track section visibility using IntersectionObserver
   useEffect(() => {
     const sectionIds = ['home', 'about', 'skills', 'works', 'contact'];
     const container = document.getElementById('fullpage-container');

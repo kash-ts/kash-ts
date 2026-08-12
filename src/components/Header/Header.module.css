@@ -6,6 +6,7 @@
   z-index: 1000;
   height: var(--header-height);
   border-bottom: 1px solid rgba(71, 85, 105, 0.12);
+  background: var(--color-bg-light);
 }
 
 .header.scrolled {
@@ -163,7 +164,7 @@
   top: var(--header-height);
   left: 0;
   right: 0;
-  background: #e8ebf4;
+  background: var(--color-bg-light);
   padding: var(--spacing-lg) var(--container-padding);
   border-bottom: 1px solid rgba(71, 85, 105, 0.12);
   box-shadow: var(--shadow-md);

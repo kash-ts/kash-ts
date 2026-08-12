@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import styles from './Home.module.css';
 
+// Fade up animation variants
 const fadeUp = {
   hidden: { opacity: 0, y: 15 },
   show: (delay = 0) => ({
@@ -15,7 +16,7 @@ export default function Home() {
   return (
     <section id="home" className={styles.home}>
 
-      {/* Avatar — Full background layer */}
+      {/* Background layer with avatar */}
       <div className={styles.avatarBg}>
         <Image
           src="/images/hero-avatar.png"
@@ -27,9 +28,9 @@ export default function Home() {
         />
       </div>
 
-      {/* Foreground Content */}
+      {/* Hero section content */}
       <div className={`container ${styles.inner}`}>
-        {/* Left: Text Content */}
+        {/* Text content */}
         <div className={styles.content}>
           <motion.h1
             className={styles.title}

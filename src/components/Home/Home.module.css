@@ -97,7 +97,7 @@
 
 /* ---- Responsive Media Queries ---- */
 
-/* Адаптация при повышенном масштабе 110%+ или ширине <= 1440px (смещаем аватар вправо) */
+/* Scale adaptation for 110%+ zoom or screen width <= 1440px (shift avatar to right) */
 @media (max-width: 1440px) and (min-width: 769px) {
   .avatarBg {
     left: auto;
@@ -112,21 +112,21 @@
   }
 }
 
-/* Планшеты (769px - 1024px) */
+/* Tablets (769px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
   .avatarBg {
     width: 68%;
   }
 }
 
-/* При острой нехватке высоты (< 540px) */
+/* Height restricted screens (< 540px) */
 @media (max-height: 540px) {
   .avatarBg {
     display: none;
   }
 }
 
-/* Мобильные устройства (<= 768px) */
+/* Mobile devices (<= 768px) */
 @media (max-width: 768px) {
   .avatarBg {
     display: none;

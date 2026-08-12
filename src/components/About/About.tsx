@@ -13,7 +13,7 @@ export default function About() {
     <section id="about" className={styles.about} ref={ref}>
       <div className={`container ${styles.inner}`}>
 
-        {/* About Card */}
+        {/* About section card */}
         <motion.div
           className={styles.card}
           initial={{ opacity: 0, y: 30 }}
