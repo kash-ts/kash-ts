@@ -128,8 +128,20 @@
   border-color: var(--color-accent);
 }
 
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.charCounter {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
 .textarea {
-  resize: vertical;
+  resize: none;
   min-height: 120px;
 }
 
@@ -172,13 +184,10 @@
 
 .turnstileContainer {
   margin: var(--spacing-xs) 0;
+  min-height: 65px;
   display: flex;
   justify-content: flex-start;
-}
-
-.turnstileContainer:empty {
-  display: none;
-  margin: 0;
+  align-items: center;
 }
 
 .successMessage {

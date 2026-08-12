@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import Script from 'next/script';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { FiCheckCircle } from 'react-icons/fi';
+import toast from 'react-hot-toast';
 import { env } from '@/config/env';
 import styles from './Contact.module.css';
 
@@ -22,11 +22,29 @@ declare global {
         }
       ) => string;
       reset: (widgetId?: string) => void;
+      remove?: (widgetId?: string) => void;
     };
   }
 }
 
 const TURNSTILE_SITE_KEY = env.turnstileSiteKey;
+
+const MAX_NAME_LENGTH = 50;
+const MAX_EMAIL_LENGTH = 100;
+const MIN_MESSAGE_LENGTH = 50;
+const MAX_MESSAGE_LENGTH = 1024;
+
+const DRAFT_STORAGE_KEY = 'contact_form_draft';
+const DRAFT_EXPIRY_TIME = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+
+// Name: letters, numbers, spaces, and allowed special characters (- _ ')
+const sanitizeName = (val: string) => val.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s\-_']/g, '');
+
+// Email: allowed email characters (latin, digits, @ . _ - +)
+const sanitizeEmail = (val: string) => val.replace(/[^a-zA-Z0-9@._+-]/g, '');
+
+// Message: strip control characters
+const sanitizeMessage = (val: string) => val.replace(/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, '');
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -45,7 +63,7 @@ type FormErrors = {
 };
 
 const validateEmail = (email: string) =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim());
 
 export default function Contact() {
   const ref = useRef(null);
@@ -55,13 +73,49 @@ export default function Contact() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [turnstileToken, setTurnstileToken] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
 
+  // Restore draft from localStorage (if non-expired <= 12h) & cleanup Turnstile on unmount
+  useEffect(() => {
+    try {
+      const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed && parsed.expiry && parsed.expiry > Date.now() && parsed.data) {
+          setFormData(parsed.data);
+        } else {
+          localStorage.removeItem(DRAFT_STORAGE_KEY);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load form draft from localStorage:', err);
+    }
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        try {
+          window.turnstile.remove?.(widgetIdRef.current);
+        } catch {
+          // ignore
+        }
+        widgetIdRef.current = null;
+      }
+    };
+  }, []);
+
   const initTurnstile = useCallback(() => {
-    if (TURNSTILE_SITE_KEY && window.turnstile && turnstileRef.current && !widgetIdRef.current) {
+    if (TURNSTILE_SITE_KEY && window.turnstile && turnstileRef.current) {
+      if (widgetIdRef.current) {
+        try {
+          window.turnstile.remove?.(widgetIdRef.current);
+        } catch {
+          // ignore
+        }
+        widgetIdRef.current = null;
+      }
+
       try {
         widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
           sitekey: TURNSTILE_SITE_KEY,
@@ -84,43 +138,97 @@ export default function Contact() {
     }
   }, []);
 
+  // Auto-render Turnstile widget when window.turnstile is available
+  useEffect(() => {
+    if (TURNSTILE_SITE_KEY && window.turnstile && turnstileRef.current && !widgetIdRef.current) {
+      initTurnstile();
+    }
+  }, [initTurnstile]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     const fieldKey = id.replace('contact-', '') as keyof typeof formData;
-    setFormData((prev) => ({ ...prev, [fieldKey]: value }));
+    let cleanedValue = value;
+
+    if (fieldKey === 'name') {
+      cleanedValue = sanitizeName(value).slice(0, MAX_NAME_LENGTH);
+    } else if (fieldKey === 'email') {
+      cleanedValue = sanitizeEmail(value).slice(0, MAX_EMAIL_LENGTH);
+    } else if (fieldKey === 'message') {
+      cleanedValue = sanitizeMessage(value).slice(0, MAX_MESSAGE_LENGTH);
+    }
+
+    const updatedData = { ...formData, [fieldKey]: cleanedValue };
+    setFormData(updatedData);
+
+    // Auto-save form draft to localStorage (valid for 12 hours)
+    try {
+      localStorage.setItem(
+        DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          data: updatedData,
+          expiry: Date.now() + DRAFT_EXPIRY_TIME,
+        })
+      );
+    } catch (err) {
+      console.error('Failed to save form draft to localStorage:', err);
+    }
 
     if (fieldKey === 'email') {
-      if (!value.trim()) {
+      if (!cleanedValue.trim()) {
         setErrors((prev) => ({ ...prev, email: 'Введите email адрес' }));
-      } else if (!validateEmail(value)) {
+      } else if (!validateEmail(cleanedValue)) {
         setErrors((prev) => ({ ...prev, email: 'Некорректный формат email' }));
       } else {
         setErrors((prev) => ({ ...prev, email: undefined }));
       }
     } else if (fieldKey === 'name') {
-      setErrors((prev) => ({ ...prev, name: value.trim() ? undefined : 'Пожалуйста, введите ваше имя' }));
+      if (!cleanedValue.trim()) {
+        setErrors((prev) => ({ ...prev, name: 'Пожалуйста, введите ваше имя' }));
+      } else if (cleanedValue.trim().length < 2) {
+        setErrors((prev) => ({ ...prev, name: 'Имя должно содержать минимум 2 символа' }));
+      } else {
+        setErrors((prev) => ({ ...prev, name: undefined }));
+      }
     } else if (fieldKey === 'message') {
-      setErrors((prev) => ({ ...prev, message: value.trim() ? undefined : 'Пожалуйста, введите сообщение' }));
+      const trimmed = cleanedValue.trim();
+      if (!trimmed) {
+        setErrors((prev) => ({ ...prev, message: 'Пожалуйста, введите сообщение' }));
+      } else if (trimmed.length < MIN_MESSAGE_LENGTH) {
+        setErrors((prev) => ({
+          ...prev,
+          message: `Сообщение должно содержать минимум ${MIN_MESSAGE_LENGTH} символов`,
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, message: undefined }));
+      }
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: FormErrors = {};
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
 
-    if (!formData.name.trim()) {
+    if (!trimmedName) {
       newErrors.name = 'Пожалуйста, введите ваше имя';
+    } else if (trimmedName.length < 2) {
+      newErrors.name = 'Имя должно содержать минимум 2 символа';
     }
 
-    if (!formData.email.trim()) {
+    if (!trimmedEmail) {
       newErrors.email = 'Пожалуйста, введите email адрес';
-    } else if (!validateEmail(formData.email)) {
+    } else if (!validateEmail(trimmedEmail)) {
       newErrors.email = 'Некорректный формат email';
     }
 
-    if (!formData.message.trim()) {
+    if (!trimmedMessage) {
       newErrors.message = 'Пожалуйста, введите сообщение';
+    } else if (trimmedMessage.length < MIN_MESSAGE_LENGTH) {
+      newErrors.message = `Сообщение должно содержать минимум ${MIN_MESSAGE_LENGTH} символов`;
     }
 
     if (TURNSTILE_SITE_KEY && !turnstileToken) {
@@ -129,19 +237,64 @@ export default function Contact() {
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+    const hasInputErrors = Boolean(newErrors.name || newErrors.email || newErrors.message);
+    const hasTurnstileError = Boolean(newErrors.turnstile);
+
+    if (hasInputErrors) {
+      toast.error('Заполните все обязательные поля формы');
+      return;
+    }
+
+    if (hasTurnstileError) {
+      toast.error('Пройдите проверку капчи перед отправкой');
+      return;
+    }
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
+    try {
+      const baseUrl = env.apiUrl.replace(/\/$/, '');
+      const endpoint = `${baseUrl}/api/message/new/`;
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+          turnstileToken: turnstileToken || undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server status ${response.status}`);
+      }
+
+      // Success toast notification
+      toast.success('Сообщение успешно отправлено!');
+
+      // Reset form fields & clear local storage draft
       setFormData({ name: '', email: '', message: '' });
       setTurnstileToken('');
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+
       if (window.turnstile && widgetIdRef.current) {
-        window.turnstile.reset(widgetIdRef.current);
+        try {
+          window.turnstile.reset(widgetIdRef.current);
+        } catch {
+          // ignore reset error if widget was unmounted
+        }
       }
-    }, 800);
+    } catch (err) {
+      console.error('Failed to submit message to API:', err);
+      // Error toast notification without resetting form fields
+      toast.error('Ошибка при отправке сообщения. Попробуйте снова чуть позже.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -157,7 +310,7 @@ export default function Contact() {
 
       <div className={`container ${styles.inner}`}>
 
-        {/* Top Header */}
+        {/* Section Header */}
         <motion.div
           className={styles.header}
           initial="hidden"
@@ -169,10 +322,10 @@ export default function Contact() {
           <p className={styles.subtitle}>Напишите — отвечу в течение дня.</p>
         </motion.div>
 
-        {/* Bottom Content Grid */}
+        {/* Feedback content grid */}
         <div className={styles.grid}>
 
-          {/* Left: form */}
+          {/* Left column: contact form */}
           <motion.div
             className={styles.card}
             initial="hidden"
@@ -180,71 +333,78 @@ export default function Contact() {
             custom={0.1}
             variants={fadeUp}
           >
-            {isSubmitted ? (
-              <div className={styles.successMessage}>
-                <FiCheckCircle size={28} className={styles.successIcon} />
-                Спасибо! Ваше сообщение успешно отправлено.
+            <form onSubmit={handleSubmit} noValidate>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="contact-name">Имя</label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  maxLength={MAX_NAME_LENGTH}
+                  className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+                  placeholder="Ваше имя"
+                />
+                {errors.name && <span className={styles.errorText}>{errors.name}</span>}
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} noValidate>
-                <div className={styles.field}>
-                  <label className={styles.label} htmlFor="contact-name">Имя</label>
-                  <input
-                    id="contact-name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                    placeholder="Ваше имя"
-                  />
-                  {errors.name && <span className={styles.errorText}>{errors.name}</span>}
-                </div>
 
-                <div className={styles.field}>
-                  <label className={styles.label} htmlFor="contact-email">Email</label>
-                  <input
-                    id="contact-email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                    placeholder="email@example.com"
-                  />
-                  {errors.email && <span className={styles.errorText}>{errors.email}</span>}
-                </div>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="contact-email">Email</label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  maxLength={MAX_EMAIL_LENGTH}
+                  className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                  placeholder="email@example.com"
+                />
+                {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+              </div>
 
-                <div className={styles.field}>
+              <div className={styles.field}>
+                <div className={styles.labelRow}>
                   <label className={styles.label} htmlFor="contact-message">Сообщение</label>
-                  <textarea
-                    id="contact-message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                    placeholder="Расскажите о вашем проекте..."
-                  />
-                  {errors.message && <span className={styles.errorText}>{errors.message}</span>}
+                  <span className={styles.charCounter}>
+                    {formData.message.length}/{MAX_MESSAGE_LENGTH}
+                  </span>
                 </div>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  autoComplete="off"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  maxLength={MAX_MESSAGE_LENGTH}
+                  className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
+                  placeholder="Расскажите о вашем проекте (минимум 50 символов)..."
+                />
+                {errors.message && <span className={styles.errorText}>{errors.message}</span>}
+              </div>
 
-                {/* Cloudflare Turnstile Container */}
-                {TURNSTILE_SITE_KEY ? (
-                  <div className={styles.turnstileContainer}>
-                    <div ref={turnstileRef} />
-                  </div>
-                ) : null}
-                {errors.turnstile && <span className={styles.errorText}>{errors.turnstile}</span>}
+              {/* Cloudflare Turnstile verification container */}
+              {TURNSTILE_SITE_KEY ? (
+                <div className={styles.turnstileContainer}>
+                  <div ref={turnstileRef} />
+                </div>
+              ) : null}
+              {errors.turnstile && <span className={styles.errorText}>{errors.turnstile}</span>}
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={styles.btn}
-                >
-                  {isSubmitting ? 'Отправка...' : 'Отправить'}
-                </button>
-              </form>
-            )}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={styles.btn}
+              >
+                {isSubmitting ? 'Отправка...' : 'Отправить'}
+              </button>
+            </form>
           </motion.div>
 
-          {/* Right: avatar placeholder */}
+          {/* Right column: responsive avatar */}
           <motion.div
             className={styles.avatarContainer}
             initial="hidden"

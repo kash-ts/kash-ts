@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import ToastProvider from '@/components/Providers/ToastProvider';
 import './globals.css';
 
+// Load Inter font with cyrillic and latin subsets
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -9,6 +11,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+// Global page metadata and SEO options
 export const metadata: Metadata = {
   title: 'Михаил — Fullstack & Automation Developer',
   description:
@@ -27,7 +30,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Михаил', url: 'https://github.com/kash-ts' }],
   creator: 'Михаил',
   openGraph: {
-    title: 'Михаил — Fullstack & Automation Developer | Портфолио',
+    title: 'Михаил — Fullstack & Automation Developer',
     description:
       'Разработка npm-библиотек, автоматизаций, сайтов и чат-ботов с опытом более 4 лет. Telegram (mini app), Discord, Figma & Blender.',
     url: 'https://github.com/kash-ts',
@@ -45,8 +48,16 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: [
+      { url: '/images/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/images/favicon.svg',
+    apple: '/images/favicon.svg',
+  },
 };
 
+// Main root layout component wrapper
 export default function RootLayout({
   children,
 }: {
@@ -54,7 +65,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ToastProvider />
+      </body>
     </html>
   );
 }
