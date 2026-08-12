@@ -7,13 +7,13 @@ function cleanValue(val: string | undefined): string {
   return val.replace(/^["']|["']$/g, '');
 }
 
-const turnstileSiteKey = cleanValue(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+const yandexCaptchaSiteKey = cleanValue(process.env.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_CLIENT_KEY);
 const siteUrl = cleanValue(process.env.NEXT_PUBLIC_SITE_URL);
 const apiUrl = cleanValue(process.env.NEXT_PUBLIC_API_URL);
 const yandexMetrikaId = cleanValue(process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID);
 
 const missingVars: string[] = [];
-if (!turnstileSiteKey) missingVars.push('NEXT_PUBLIC_TURNSTILE_SITE_KEY');
+if (!yandexCaptchaSiteKey) missingVars.push('NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_CLIENT_KEY');
 if (!siteUrl) missingVars.push('NEXT_PUBLIC_SITE_URL');
 if (!apiUrl) missingVars.push('NEXT_PUBLIC_API_URL');
 
@@ -26,7 +26,7 @@ if (missingVars.length > 0) {
 }
 
 export const env = {
-  turnstileSiteKey,
+  yandexCaptchaSiteKey,
   siteUrl,
   apiUrl,
   yandexMetrikaId,

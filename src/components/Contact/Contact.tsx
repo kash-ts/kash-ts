@@ -1,33 +1,14 @@
 'use client';
 
-import { useRef, useState, useCallback, useEffect } from 'react';
-import Script from 'next/script';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { SmartCaptcha } from '@yandex/smart-captcha';
 import { env } from '@/config/env';
 import styles from './Contact.module.css';
 
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (
-        container: string | HTMLElement,
-        options: {
-          sitekey: string;
-          theme?: 'light' | 'dark' | 'auto';
-          callback: (token: string) => void;
-          'error-callback'?: () => void;
-          'expired-callback'?: () => void;
-        }
-      ) => string;
-      reset: (widgetId?: string) => void;
-      remove?: (widgetId?: string) => void;
-    };
-  }
-}
-
-const TURNSTILE_SITE_KEY = env.turnstileSiteKey;
+const CAPTCHA_SITE_KEY = env.yandexCaptchaSiteKey;
 
 const MAX_NAME_LENGTH = 50;
 const MAX_EMAIL_LENGTH = 100;
@@ -59,7 +40,7 @@ type FormErrors = {
   name?: string;
   email?: string;
   message?: string;
-  turnstile?: string;
+  captcha?: string;
 };
 
 const validateEmail = (email: string) =>
@@ -71,13 +52,11 @@ export default function Contact() {
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [turnstileToken, setTurnstileToken] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [resetCaptchaKey, setResetCaptchaKey] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const turnstileRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
-
-  // Restore draft from localStorage (if non-expired <= 12h) & cleanup Turnstile on unmount
+  // Restore draft from localStorage (if non-expired <= 12h)
   useEffect(() => {
     try {
       const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
@@ -92,58 +71,7 @@ export default function Contact() {
     } catch (err) {
       console.error('Failed to load form draft from localStorage:', err);
     }
-
-    return () => {
-      if (widgetIdRef.current && window.turnstile) {
-        try {
-          window.turnstile.remove?.(widgetIdRef.current);
-        } catch {
-          // ignore
-        }
-        widgetIdRef.current = null;
-      }
-    };
   }, []);
-
-  const initTurnstile = useCallback(() => {
-    if (TURNSTILE_SITE_KEY && window.turnstile && turnstileRef.current) {
-      if (widgetIdRef.current) {
-        try {
-          window.turnstile.remove?.(widgetIdRef.current);
-        } catch {
-          // ignore
-        }
-        widgetIdRef.current = null;
-      }
-
-      try {
-        widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-          sitekey: TURNSTILE_SITE_KEY,
-          theme: 'light',
-          callback: (token: string) => {
-            setTurnstileToken(token);
-            setErrors((prev) => ({ ...prev, turnstile: undefined }));
-          },
-          'error-callback': () => {
-            setTurnstileToken('');
-            setErrors((prev) => ({ ...prev, turnstile: 'Ошибка капчи Cloudflare Turnstile' }));
-          },
-          'expired-callback': () => {
-            setTurnstileToken('');
-          },
-        });
-      } catch (err) {
-        console.error('Turnstile render error:', err);
-      }
-    }
-  }, []);
-
-  // Auto-render Turnstile widget when window.turnstile is available
-  useEffect(() => {
-    if (TURNSTILE_SITE_KEY && window.turnstile && turnstileRef.current && !widgetIdRef.current) {
-      initTurnstile();
-    }
-  }, [initTurnstile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -231,21 +159,21 @@ export default function Contact() {
       newErrors.message = `Сообщение должно содержать минимум ${MIN_MESSAGE_LENGTH} символов`;
     }
 
-    if (TURNSTILE_SITE_KEY && !turnstileToken) {
-      newErrors.turnstile = 'Пройдите проверку Cloudflare Turnstile перед отправкой';
+    if (CAPTCHA_SITE_KEY && !captchaToken) {
+      newErrors.captcha = 'Пройдите проверку Яндекс SmartCaptcha перед отправкой';
     }
 
     setErrors(newErrors);
 
     const hasInputErrors = Boolean(newErrors.name || newErrors.email || newErrors.message);
-    const hasTurnstileError = Boolean(newErrors.turnstile);
+    const hasCaptchaError = Boolean(newErrors.captcha);
 
     if (hasInputErrors) {
       toast.error('Заполните все обязательные поля формы');
       return;
     }
 
-    if (hasTurnstileError) {
+    if (hasCaptchaError) {
       toast.error('Пройдите проверку капчи перед отправкой');
       return;
     }
@@ -265,7 +193,7 @@ export default function Contact() {
           name: trimmedName,
           email: trimmedEmail,
           message: trimmedMessage,
-          turnstileToken: turnstileToken || undefined,
+          captchaToken: captchaToken || undefined,
         }),
       });
 
@@ -276,18 +204,11 @@ export default function Contact() {
       // Success toast notification
       toast.success('Сообщение успешно отправлено!');
 
-      // Reset form fields & clear local storage draft
+      // Reset form fields, clear draft, and reset captcha
       setFormData({ name: '', email: '', message: '' });
-      setTurnstileToken('');
+      setCaptchaToken('');
+      setResetCaptchaKey((prev) => prev + 1);
       localStorage.removeItem(DRAFT_STORAGE_KEY);
-
-      if (window.turnstile && widgetIdRef.current) {
-        try {
-          window.turnstile.reset(widgetIdRef.current);
-        } catch {
-          // ignore reset error if widget was unmounted
-        }
-      }
     } catch (err) {
       console.error('Failed to submit message to API:', err);
       // Error toast notification without resetting form fields
@@ -299,15 +220,6 @@ export default function Contact() {
 
   return (
     <section id="contact" className={styles.section} ref={ref}>
-      {/* Cloudflare Turnstile Explicit API Script */}
-      {TURNSTILE_SITE_KEY && (
-        <Script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-          onLoad={initTurnstile}
-          strategy="afterInteractive"
-        />
-      )}
-
       <div className={`container ${styles.inner}`}>
 
         {/* Section Header */}
@@ -386,13 +298,26 @@ export default function Contact() {
                 {errors.message && <span className={styles.errorText}>{errors.message}</span>}
               </div>
 
-              {/* Cloudflare Turnstile verification container */}
-              {TURNSTILE_SITE_KEY ? (
+              {/* Official Yandex SmartCaptcha React component */}
+              {CAPTCHA_SITE_KEY ? (
                 <div className={styles.turnstileContainer}>
-                  <div ref={turnstileRef} />
+                  <SmartCaptcha
+                    key={resetCaptchaKey}
+                    sitekey={CAPTCHA_SITE_KEY}
+                    onSuccess={(token) => {
+                      setCaptchaToken(token);
+                      setErrors((prev) => ({ ...prev, captcha: undefined }));
+                    }}
+                    onTokenExpired={() => setCaptchaToken('')}
+                    onNetworkError={() => {
+                      setCaptchaToken('');
+                      setErrors((prev) => ({ ...prev, captcha: 'Ошибка капчи Яндекс SmartCaptcha' }));
+                    }}
+                    theme="light"
+                  />
                 </div>
               ) : null}
-              {errors.turnstile && <span className={styles.errorText}>{errors.turnstile}</span>}
+              {errors.captcha && <span className={styles.errorText}>{errors.captcha}</span>}
 
               <button
                 type="submit"
