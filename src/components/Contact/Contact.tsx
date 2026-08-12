@@ -293,7 +293,7 @@ export default function Contact() {
                   onChange={handleInputChange}
                   maxLength={MAX_MESSAGE_LENGTH}
                   className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                  placeholder="Расскажите о вашем проекте (минимум 50 символов)..."
+                  placeholder="Расскажите о вашем проекте (минимум 50 символов)"
                 />
                 {errors.message && <span className={styles.errorText}>{errors.message}</span>}
               </div>

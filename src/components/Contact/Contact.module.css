@@ -215,6 +215,10 @@
     grid-template-columns: 1fr;
   }
 
+  .avatarContainer {
+    display: none !important;
+  }
+
   .subtitle {
     max-width: 100%;
   }
