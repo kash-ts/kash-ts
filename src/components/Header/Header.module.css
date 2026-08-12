@@ -5,7 +5,7 @@
   right: 0;
   z-index: 1000;
   height: var(--header-height);
-  border-bottom: 1px solid rgba(71, 85, 105, 0.12);
+  border-bottom: none;
   background: var(--color-bg-light);
 }
 
