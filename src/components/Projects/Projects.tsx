@@ -40,7 +40,7 @@ const projectsData: Project[] = [
   },
   {
     id: 'kash-ts/atb-currency-bot',
-    title: 'АТБ - Отслеживание курса',
+    title: 'Отслеживание курса АТБ',
     category: 'Telegram Bot',
     description:
       'Telegram-бот для отслеживания курсов валют (USD, EUR, CNY) с сайта АТБ (Азиатско-Тихоокеанский банк). Бот сохраняет курсы в локальную базу данных (SQLite) и каждый час отправляет пользователю уведомления об их изменении.',
@@ -134,7 +134,7 @@ export default function Projects() {
           {projectsData.map((project, idx) => {
             const stats = statsMap[project.id];
             const starValue = stats?.stars !== undefined ? stats.stars : '???';
-            const downloadValue = stats?.downloads;
+            const downloadValue = stats?.downloads !== undefined ? stats.downloads : '???';
 
             return (
               <motion.article
@@ -161,7 +161,7 @@ export default function Projects() {
                   {/* Top Stats Row: Downloads on LEFT, Stars on RIGHT */}
                   <div className={styles.statsRow}>
                     <div>
-                      {downloadValue !== undefined && downloadValue !== null && (
+                      {project.isNpm && (
                         <span className={styles.downloadStat} title="Количество установок">
                           <FiDownload size={14} className={styles.downloadIcon} /> {downloadValue}
                         </span>
