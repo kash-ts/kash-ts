@@ -169,7 +169,7 @@ export default function Projects() {
                     </div>
 
                     <span className={styles.starStat} title="Звёзды GitHub">
-                      <FiStar size={14} className={styles.starIcon} /> {starValue}
+                      {starValue} <FiStar size={14} className={styles.starIcon} />
                     </span>
                   </div>
 
