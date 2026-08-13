@@ -198,7 +198,7 @@ export default function Contact() {
 
     try {
       const baseUrl = env.apiUrl.replace(/\/$/, '');
-      const endpoint = `${baseUrl}/api/messages/new/`;
+      const endpoint = `${baseUrl}/api/messages/new`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
