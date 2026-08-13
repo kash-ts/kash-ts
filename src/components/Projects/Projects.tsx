@@ -44,7 +44,7 @@ const projectsData: Project[] = [
     category: 'Telegram Bot',
     description:
       'Telegram-бот для отслеживания курсов валют (USD, EUR, CNY) с сайта АТБ (Азиатско-Тихоокеанский банк). Бот сохраняет курсы в локальную базу данных (SQLite) и каждый час отправляет пользователю уведомления об их изменении.',
-    tags: ['Python', 'Telegram'],
+    tags: ['Python', 'SQLite', 'Telegram'],
     image: '/images/project-2.png',
     isNpm: false,
     github: 'https://github.com/kash-ts/atb-currency-bot',
@@ -76,6 +76,14 @@ export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: '-80px' });
   const [statsMap, setStatsMap] = useState<Record<string, ProjectStats>>({});
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Check URL hash for #works-full on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#works-full') {
+      setIsExpanded(true);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAllProjectStats = async () => {
@@ -115,6 +123,10 @@ export default function Projects() {
     fetchAllProjectStats();
   }, []);
 
+  // Display only 4 projects initially unless expanded or project count <= 4
+  const visibleProjects =
+    isExpanded || projectsData.length <= 4 ? projectsData : projectsData.slice(0, 4);
+
   return (
     <section id="works" className={styles.section} ref={ref}>
       <div className={`container ${styles.inner}`}>
@@ -131,7 +143,7 @@ export default function Projects() {
 
         {/* Project cards grid */}
         <div className={styles.grid}>
-          {projectsData.map((project, idx) => {
+          {visibleProjects.map((project, idx) => {
             const stats = statsMap[project.id];
             const starValue = stats?.stars !== undefined ? stats.stars : '???';
             const downloadValue = stats?.downloads !== undefined ? stats.downloads : '???';
@@ -163,13 +175,15 @@ export default function Projects() {
                     <div>
                       {project.isNpm && (
                         <span className={styles.downloadStat} title="Количество установок">
-                          <FiDownload size={14} className={styles.downloadIcon} /> {downloadValue}
+                          <FiDownload size={14} className={styles.downloadIcon} />
+                          <span>{downloadValue}</span>
                         </span>
                       )}
                     </div>
 
                     <span className={styles.starStat} title="Звёзды GitHub">
-                      {starValue} <FiStar size={14} className={styles.starIcon} />
+                      <span>{starValue}</span>
+                      <FiStar size={14} className={styles.starIcon} />
                     </span>
                   </div>
 
@@ -190,18 +204,24 @@ export default function Projects() {
           })}
         </div>
 
-        {/* Continue button at bottom center */}
-        <motion.div
-          className={styles.actionContainer}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? 'show' : 'hidden'}
-          custom={0.4}
-          variants={fadeUp}
-        >
-          <a href="#contact" className={styles.btnContinue}>
-            Продолжить
-          </a>
-        </motion.div>
+        {/* View all projects text link (renders only if projects count > 4 and not expanded) */}
+        {projectsData.length > 4 && !isExpanded && (
+          <motion.div
+            className={styles.actionContainer}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? 'show' : 'hidden'}
+            custom={0.4}
+            variants={fadeUp}
+          >
+            <a
+              href="#works-full"
+              className={styles.viewAllLink}
+              onClick={() => setIsExpanded(true)}
+            >
+              Посмотреть все проекты &rarr;
+            </a>
+          </motion.div>
+        )}
 
       </div>
     </section>
