@@ -135,6 +135,7 @@
   line-height: 1.55;
   flex-grow: 1;
   display: -webkit-box;
+  line-clamp: 7;
   -webkit-line-clamp: 7;
   -webkit-box-orient: vertical;
   overflow: hidden;
